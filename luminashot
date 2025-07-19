@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+# ========== LuminaShot ==========
+# A Wayland screenshot tool with quality-focused capture
+
+# --- Defaults ---
+MODE="monitor"
+COPY=false
+FILENAME=""
+SHOW_NOTIFICATION=true
+# Use LUMINA_SAVE_DIR if set, otherwise default to $HOME/Pictures/Screenshots
+SAVE_DIR="${LUMINA_SAVE_DIR:-$HOME/Pictures/Screenshots}"
+mkdir -p "$SAVE_DIR"
+
+# --- Help Function ---
+show_help() {
+    cat <<EOF
+Options:
+  -h                Show this help message
+  -m [mode]         Screenshot mode: region, window, monitor
+                      region  - Select area using mouse (default: slurp)
+                      window  - Click to capture a window
+                      monitor - Auto-detect monitor under cursor (default mode)
+  -c                Copy the screenshot to clipboard using wl-copy
+  -f [filename]     Set custom filename (without .png extension)
+  -s                Silent mode (no notification popup)
+
+Examples:
+  luminashot                          # Take monitor screenshot (default)
+  luminashot -m region -c             # Capture selected region and copy to clipboard
+  luminashot -m window -f code_win    # Screenshot window, save as code_win.png
+  LINA_SAVE_DIR=/tmp luminashot     # Save screenshot to /tmp directory
+
+Saved images are stored in:
+  $SAVE_DIR
+  This path can be overridden by setting the LUMINA_SAVE_DIR environment variable.
+
+Dependencies:
+  grim, slurp, wl-copy, jq, hyprctl, notify-send
+
+EOF
+}
+
+# --- Parse Arguments ---
+while getopts ":hm:cf:s" opt; do
+  case $opt in
+    h) show_help; exit 0 ;;
+    m) MODE=$(echo "$OPTARG" | tr '[:upper:]' '[:lower:]') ;;
+    c) COPY=true ;;
+    f) FILENAME="$OPTARG" ;;
+    s) SHOW_NOTIFICATION=false ;;
+    \?) echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
+    :) echo "Option -$OPTARG requires an argument." >&2; exit 1 ;;
+  esac
+done
+
+# --- Create File Path ---
+TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
+NAME="${FILENAME:-screenshot_$TIMESTAMP}"
+FILE="$SAVE_DIR/$NAME.png"
+
+# --- Capture Based on Mode ---
+case "$MODE" in
+  region)
+    AREA=$(slurp)
+    [ -z "$AREA" ] && echo "Cancelled." && exit 1
+    grim -g "$AREA" "$FILE" || { echo "Screenshot failed (grim)." >&2; exit 1; }
+    ;;
+  window)
+    AREA=$(slurp -w 0)
+    [ -z "$AREA" ] && echo "Cancelled." && exit 1
+    grim -g "$AREA" "$FILE" || { echo "Screenshot failed (grim)." >&2; exit 1; }
+    ;;
+  monitor)
+    MONITOR_NAME=$(hyprctl activeworkspace -j | jq -r '.monitor')
+    GEOM=$(hyprctl monitors -j | jq -r ".[] | select(.name==\"$MONITOR_NAME\") | \"\(.x),\(.y) \(.width)x\(.height)\"")
+    [ -z "$GEOM" ] && echo "Failed to get monitor geometry." >&2 && exit 1
+    grim -g "$GEOM" "$FILE" || { echo "Screenshot failed (grim)." >&2; exit 1; }
+    ;;
+  *)
+    echo "Invalid mode: $MODE. Use 'region', 'window', or 'monitor'." >&2
+    exit 1
+    ;;
+esac
+
+# --- Copy to Clipboard ---
+if $COPY; then
+  wl-copy < "$FILE"
+fi
+
+# --- Notification ---
+if $SHOW_NOTIFICATION; then
+  notify-send "LuminaShot 📸" "Saved to: $FILE" -i "$FILE"
+fi
