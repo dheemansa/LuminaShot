@@ -78,13 +78,12 @@ Once installed, you can run LuminaShot from your terminal or, more conveniently,
 ### Example Keybinds (`hyprland.conf`)
 
 Here is an example of how you can set up keybinds for LuminaShot:
-
-
-Screenshot Keybinds for LuminaShot
+'''
+#Screenshot Keybinds for LuminaShot
 bind = $mainMod, P, exec, luminashot -m window      # Select a window
 bind = $mainMod SHIFT, P, exec, luminashot -m region    # Select a region
 bind = $mainMod CTRL, P, exec, luminashot -m monitor   # Capture current monitor
-
+'''
 
 ---
 
