@@ -4,7 +4,13 @@ A fast, reactive screenshot tool for the **Hyprland** Wayland compositor, writte
 
 > LuminaShot is designed to be a simple yet powerful utility for capturing your screen. Its standout feature is a fully reactive window selection mode that intelligently restarts when you switch workspaces, ensuring you always capture the window you intend to.
 
+> [!WARNING]
+> **LuminaShot** is designed *exclusively* for the **Hyprland** Wayland compositor.  
+> It depends on `hyprctl` and Hyprland-specific behavior — it **will not** work with other compositors like Sway, Weston, or GNOME.
+
 ---
+
+
 
 ## ✨ Features
 
@@ -36,7 +42,7 @@ These instructions are for Arch Linux, but can be adapted for other distribution
 1.  **Install Dependencies:**
     Open a terminal and install the required packages from the official repositories.
     ```bash
-    sudo pacman -Syu hyprland grim slurp libnotify
+    sudo pacman -S grim slurp libnotify --needed
     ```
 
 2.  **Install the Rust Toolchain:**
