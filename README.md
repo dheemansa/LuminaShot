@@ -18,7 +18,7 @@ A fast, reactive screenshot tool for the **Hyprland** Wayland compositor, writte
 
 ---
 
-## 🛠️ Dependencies
+## ️ Dependencies
 
 To run LuminaShot, you need the following programs installed on your system:
 
@@ -29,7 +29,7 @@ To run LuminaShot, you need the following programs installed on your system:
 
 ---
 
-## 🚀 Installation
+##  Installation
 
 These instructions are for Arch Linux, but can be adapted for other distributions.
 
@@ -50,7 +50,7 @@ These instructions are for Arch Linux, but can be adapted for other distribution
     Clone this repository and build the project in release mode for the best performance.
     ```bash
     # Replace with the actual repository URL
-    git clone [https://github.com/your-username/luminashot.git](https://github.com/your-username/luminashot.git)
+    git clone https://github.com/dheemansa/LuminaShot.git
     cd luminashot
     cargo build --release
     ```
@@ -88,14 +88,22 @@ bind = $mainMod CTRL, P, exec, luminashot -m monitor   # Capture current monitor
 
 ---
 
-## 🗺️ Roadmap
+## ️ Roadmap
 
 -   [x] Implement reactive window selection
 -   [x] Add desktop notifications
--   [ ] Add a `--clipboard-only` flag
--   [ ] Allow custom filenames via command-line argument
+-   [ ] Add support for clipboard
+-   [ ] Add -c (copy to clipboard) -f (custom file name) -h (help) -s (custom save location)  flags 
 -   [ ] Add support for `LUMINA_SAVE_DIR` environment variable
+-   [ ] Make my own version of slurp for better user interation
 
-That's the plan! :joy:
+
+---
+
+##  Credits
+
+This project was inspired by [Hyprshot](https://github.com/Gustash/Hyprshot) by [@Gustash](https://github.com/Gustash)
+
+
 
 [^1]: Using `rustup` is the official and recommended way to install Rust. It allows you to easily manage multiple toolchains and keep your compiler up to date.
