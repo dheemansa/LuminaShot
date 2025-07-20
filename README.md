@@ -55,7 +55,6 @@ These instructions are for Arch Linux, but can be adapted for other distribution
 3.  **Build from Source:**
     Clone this repository and build the project in release mode for the best performance.
     ```bash
-    # Replace with the actual repository URL
     git clone https://github.com/dheemansa/LuminaShot.git
     cd luminashot
     cargo build --release
