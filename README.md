@@ -48,7 +48,7 @@ These instructions are for Arch Linux, but can be adapted for other distribution
 2.  **Install the Rust Toolchain:**
     We recommend using `rustup` to install and manage your Rust installation.[^1]
     ```bash
-    sudo pacman -S rustup
+    sudo pacman -S rustup --needed
     rustup default stable
     ```
 
