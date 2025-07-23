@@ -1,5 +1,5 @@
 [package]
-name = "luminashot_rust"
+name = "luminashot"
 version = "0.1.0"
 edition = "2021"
 
